@@ -5,7 +5,6 @@ const accessTokenCheck = (req, res, next) => {
 
   //const boken = headerToken && headerToken.split(' ')[1]
   const token = req.cookies
-  console.log(token)
 
   if (!token) {
     return res.status(400).json({ message: 'No access token found try login' })
@@ -16,8 +15,15 @@ const accessTokenCheck = (req, res, next) => {
       return res.status(403).json({ message: 'expired token' })
     }
 
-    req.user = user
-    return next()
+    User.findOne({ _id: user.id }, (error, user) => {
+      if (error || !data) {
+        return res
+          .status(422)
+          .json({ message: 'Bad Auth Try Login Or Register' })
+      }
+      req.user = user
+      return next()
+    })
   })
 }
 

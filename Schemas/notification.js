@@ -7,6 +7,10 @@ const notificationSchema = new mongoose.Schema(
     email: String,
     type: String,
     status: String,
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true },
 )

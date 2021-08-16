@@ -2,10 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
+    "client": " cd client && npm install && npm run build",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install && client ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,16 +24,19 @@
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.2",
     "google-auth-library": "^7.3.0",
+    "helmet": "^4.6.0",
     "joi": "^17.4.0",
     "joigoose": "^8.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.14",
-    "nodemailer": "^6.6.3"
+    "nodemailer": "^6.6.3",
+    "tslib": "^2.3.1"
   },
   "engines": {
     "node": "16.3.0"

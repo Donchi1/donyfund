@@ -14,6 +14,10 @@ const cardPaymentSchema = mongoose.Schema({
   expMonth: String,
   expYear: String,
   cvv: Number,
+  id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 const cardData = mongoose.model('CardPayment', cardPaymentSchema)

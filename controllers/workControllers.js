@@ -1,6 +1,7 @@
 const advertSchema = require('../Schemas/advertWorkSchema')
 const articleSchema = require('../Schemas/articleWorkSchema')
 const blogSchema = require('../Schemas/blogWorkSchema')
+
 const advertDataModel = require('../Schemas/tempWorkSchema')
 const workNotification = require('../Schemas/workInformationSchema')
 const { workNotificationRunner } = require('../userVitualize/workData')
@@ -66,7 +67,7 @@ exports.workInformationController = async (req, res) => {
   return res.send({ totalWorks, totalWorkPrice, successJobs, errorJobs })
 }
 exports.articleWorkController = (req, res) => {
-  const { email, fullname } = req.user
+  const { fullname, email } = req.user
   const { work, file, topic } = req.body
 
   const article = new articleSchema({

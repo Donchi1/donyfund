@@ -4,7 +4,7 @@ const withdrawalSchema = mongoose.Schema({
   email: String,
   wallet: String,
 
-  _id: {
+  id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },

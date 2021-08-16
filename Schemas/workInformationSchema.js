@@ -21,6 +21,10 @@ const WorkNotificationSchema = new mongoose.Schema(
     status: {
       type: String,
     },
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true },
 )

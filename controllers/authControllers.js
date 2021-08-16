@@ -23,7 +23,7 @@ exports.registerController = (req, res) => {
     if (user) {
       return res.status(401).json({ message: 'User already exist' })
     }
-    const accessToken = jwt.sign(value, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign(user._id, process.env.JWT_SECRET, {
       expiresIn: '15m',
     })
     transporter.sendMail(
@@ -56,9 +56,7 @@ exports.loginController = (req, res) => {
 
     const accessToken = jwt.sign(
       {
-        email,
         id: user._id,
-        fullname: user.fullname,
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' },
@@ -75,7 +73,7 @@ exports.loginController = (req, res) => {
 
           res.cookie('token', accessToken, {
             httpOnly: true,
-            //sameSite: 'strict',
+            sameSite: 'strict',
             secured: false,
           })
 
@@ -160,7 +158,7 @@ exports.passwordResetController = (req, res) => {
     if (err || !user) {
       res.status(404).json({ message: 'user with this email does not exist' })
     } else {
-      const token = jwt.sign({ _id: user.id }, process.env.JWT_RESET, {
+      const token = jwt.sign({ id: user.id }, process.env.JWT_RESET, {
         exp: '10m',
       })
 
@@ -190,15 +188,15 @@ exports.passwordUpdateController = (req, res) => {
     return res.status(422).json({ message: error.message })
   }
 
-  jwt.verify(token, process.env.JWT_RESET, (error, value) => {
-    if (error || !value) {
+  jwt.verify(token, process.env.JWT_RESET, (error, decoded) => {
+    if (error || !decoded) {
       return res.status(403).json({ message: 'invalid or expired token' })
     }
     bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
       if (err) {
         return res.status(401).json({ message: 'An error occured' })
       }
-      User.findById(value._id)
+      User.findOne({ id: decoded.id })
         .then((user) => {
           user.password = hashedPassword
           user
@@ -249,12 +247,12 @@ exports.googleLoginController = (req, res) => {
       if (email_verified) {
         User.findOne({ email }).then((user) => {
           if (user) {
-            const token = jwt.sign(user, process.env.JWT_SECRET, {
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
               expiresIn: '7d',
             })
             res.cookie('token', token, {
               httpOnly: true,
-              secure: false,
+              secure: true,
               sameSite: 'strict',
             })
             transporter.sendMail(emailData.welcome(user), (err, success) => {
@@ -280,17 +278,12 @@ exports.googleLoginController = (req, res) => {
               profilePic: picture,
             })
             user.save((err, user) => {
-              const { email, id, password } = user
               if (err) {
                 return res.status(422).json({ message: err.message })
               }
-              const token = jwt.sign(
-                { email, password, _id: id },
-                process.env.JWT_SECRET,
-                {
-                  expiresIn: '7d',
-                },
-              )
+              const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                expiresIn: '7d',
+              })
               res.cookie('token', token, {
                 httpOnly: true,
                 secure: false,
@@ -376,26 +369,14 @@ exports.updateProfileController = (req, res) => {
   )
 }
 exports.profileInfoController = (req, res) => {
-  const { token } = req.user
+  const { email } = req.user
 
-  if (!token) {
-    return res.status(400).json({ message: 'no access' })
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err || !decoded) {
-      return res.status(403).json({ message: 'expired token' })
+  User.findOne({ email }, (err, user) => {
+    if (err || !user) {
+      return res.status(400).json({ message: err.message })
     }
 
-    const { email } = decoded
-
-    User.findOne({ email }, (err, user) => {
-      if (err || !user) {
-        return res.status(400).json({ message: err.message })
-      }
-
-      return res.json({ user })
-    })
+    return res.json({ user })
   })
 }
 

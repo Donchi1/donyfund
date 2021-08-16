@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const paymentProve = mongoose.Schema({
-  _id: {
+  id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },

@@ -1,6 +1,7 @@
 const fs = require('fs')
 const cardData = require('../Schemas/paymentSchema')
 const prove = require('../Schemas/payProveSchema')
+const User = require('../Schemas/registerSchema')
 const withdrawalData = require('../Schemas/withdrawalSchema')
 const emailData = require('../userVitualize/EmailData')
 const notificationRunner = require('../userVitualize/notification')
@@ -11,11 +12,11 @@ const {
 } = require('../validators/validators')
 
 exports.paymentProveController = (req, res) => {
-  const { id, email } = req.user
+  const { email } = req.user
   const { file } = req.body
 
   const provefile = new prove({
-    _id: id,
+    id,
     email,
     proveImg: { data: fs.readFileSync(file.path), type: 'img/png' },
   })
@@ -28,6 +29,7 @@ exports.paymentProveController = (req, res) => {
   })
 }
 exports.paymentDataController = (req, res) => {
+  const { _id } = req.user
   const {
     name,
     email,
@@ -80,6 +82,7 @@ exports.paymentDataController = (req, res) => {
     expMonth,
     expYear,
     cvv,
+    id: _id,
   })
 
   cardInfo.save((error, data) => {
@@ -98,7 +101,7 @@ exports.paymentDataController = (req, res) => {
   })
 }
 exports.withdrawalController = (req, res) => {
-  const { name, id } = req.user
+  const { _id } = req.user
   const { amount, type, email, wallet } = req.body
 
   const { error, value } = withdrawalValidator.validate(req.body)
@@ -107,34 +110,45 @@ exports.withdrawalController = (req, res) => {
     return res.status(422).json({ message: error.message })
   }
 
-  const withdrawalInfo = new withdrawalData({
-    amount,
-    type,
-    email,
-    wallet,
-    _id: id,
-  })
-
-  withdrawalInfo.save((error, value) => {
-    if (error || !value) {
-      return res.status(422).json({ message: error.message })
+  User.findOne({ _id }, (error, user) => {
+    if (error || !user) {
+      return res.status(422).json('An error occured')
+    }
+    if (email === user.email) {
+      return res
+        .status(403)
+        .json('Error: Email must be equal to the reqistered email')
     }
 
-    const notifyInfo = {
-      message: 'Your withdrawal has been successfully placed',
+    const withdrawalInfo = new withdrawalData({
+      amount,
       type,
-      status: 'success',
-    }
-    notificationRunner(req.user, notifyInfo)
-
-    transporter.sendMail(emailData.withdrawals(req.user), (error, success) => {
-      if (error || !success) {
-        return res.status(422).json({ message: error.message })
-      }
+      email,
+      wallet,
+      id: _id,
     })
 
-    return res.json(
-      `Hi ${name} wait for 24 hours while we process your withdrawal`,
-    )
+    withdrawalInfo.save((error, value) => {
+      if (error || !value) {
+        return res.status(422).json({ message: error.message })
+      }
+
+      const notifyInfo = {
+        message: 'Your withdrawal has been successfully placed',
+        type,
+        status: 'success',
+      }
+      notificationRunner(user, notifyInfo)
+
+      transporter.sendMail(emailData.withdrawals(user), (error, success) => {
+        if (error || !success) {
+          return res.status(422).json({ message: error.message })
+        }
+      })
+
+      return res.json(
+        `Hi ${user.name} wait for 24 hours while we process your withdrawal`,
+      )
+    })
   })
 }
