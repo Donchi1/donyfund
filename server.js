@@ -35,9 +35,10 @@ app.use(
     },
   }),
 )
+
 const port = process.env.PORT || 5000
 
-database()
+//database()
 
 app.use('/admin', adminRoute)
 app.use('/auth', authRoutes)
@@ -47,11 +48,9 @@ app.use('/api/transactions', transactionRoutes)
 app.use('/api/general', generalRoutes)
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client', 'build')))
+  app.use(express.static(path.join(__dirname + '/client/build')))
   app.get('*', (req, res) => {
-    res.sendFile(
-      express.static(path.join(__dirname, 'client', 'build', 'index.html')),
-    )
+    res.sendFile(__dirname + '/client/build/index.html')
   })
 }
 app.listen(port, () => {
