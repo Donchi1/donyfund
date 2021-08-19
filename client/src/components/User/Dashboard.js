@@ -187,12 +187,12 @@ function Dashboard() {
                       {notificationData &&
                         notificationData.map((each) => (
                           <li key={each.id}>
-                            <i className="dash-icon-box ti-layers text-purple bg-light-purple"></i>{' '}
-                            Your job for{' '}
-                            <strong>
-                              <Link to="#">IOS Developer</Link>
-                            </strong>{' '}
-                            has been approved!
+                            <i
+                              className={`dash-icon-box ti-layers text-${each.status} bg-${each.status}`}
+                            ></i>{' '}
+                            <strong>{each.creatorname}</strong> <br />
+                            <span>{each.message}</span>
+                            {each.createdAt}
                             <Link to="#" className="close-list-item"></Link>
                           </li>
                         ))}

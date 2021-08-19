@@ -28,18 +28,23 @@ exports.workNotificationDeleteController = (req, res) => {
 exports.workNotificationController = (req, res) => {
   const { email } = req.user
 
-  workNotification.find({ email }).exec((err, workNotes) => {
-    if (err || !workNotes) {
-      return res.status(404).json({ message: 'sorry no information found' })
-    }
-    const articleNotes = workNotes.filter(
-      (notes) => notes.category === 'article',
-    )
-    const blogNotes = workNotes.filter((notes) => notes.category === 'blog')
-    const advertNotes = workNotes.filter((notes) => notes.category === 'advert')
+  workNotification
+    .find({ email })
+    .sort({ createdAt: -1 })
+    .exec((err, workNotes) => {
+      if (err || !workNotes) {
+        return res.status(404).json({ message: 'sorry no information found' })
+      }
+      const articleNotes = workNotes.filter(
+        (notes) => notes.category === 'article',
+      )
+      const blogNotes = workNotes.filter((notes) => notes.category === 'blog')
+      const advertNotes = workNotes.filter(
+        (notes) => notes.category === 'advert',
+      )
 
-    return res.json({ articleNotes, blogNotes, advertNotes })
-  })
+      return res.json({ articleNotes, blogNotes, advertNotes })
+    })
 }
 exports.workInformationController = async (req, res) => {
   const { email } = req.user

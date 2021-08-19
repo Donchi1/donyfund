@@ -10,8 +10,10 @@ const paymentProve = mongoose.Schema({
     required: true,
   },
   proveImg: {
-    data: Buffer,
-    type: String,
+    picName: { type: String, required: true },
+    picType: { type: String, required: true },
+    picPath: { type: String, required: true },
+    picSize: { type: String, required: true },
   },
 })
 

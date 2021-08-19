@@ -1,15 +1,29 @@
 import React, { useState } from 'react'
+import { Alert, Spinner } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { LETTER_ALERT, LETTER_INITIAL } from '../State/actionCreator'
 import { newsLetterAction } from '../State/actions'
 
 function Footer() {
   const [letterData, setletterData] = useState('')
+  const dispatch = useDispatch()
 
   const handleSubscribe = (e) => {
     e.preventDefault()
+    dispatch({ type: LETTER_INITIAL })
     newsLetterAction(letterData)
     return setletterData('')
   }
+
+  const {
+    errorMessage,
+    successMessage,
+    shouldBtnShow,
+    loading,
+    successAlert,
+    errorAlert,
+  } = useSelector((state) => state.letterReducer)
 
   return (
     <>
@@ -32,6 +46,26 @@ function Footer() {
                 </p>
               </div>
               <div className="inner-flexible-box subscribe-box">
+                <div className="w-25 m-auto alert-media">
+                  <Alert
+                    as="h4"
+                    variant="success"
+                    show={successAlert}
+                    dismissible
+                    onClose={() => dispatch({ type: LETTER_ALERT })}
+                  >
+                    {successMessage}
+                  </Alert>
+                  <Alert
+                    as="h4"
+                    dismissible
+                    variant="danger"
+                    show={errorAlert}
+                    onClose={() => dispatch({ type: LETTER_ALERT })}
+                  >
+                    {errorMessage}
+                  </Alert>
+                </div>
                 <form onSubmit={handleSubscribe}>
                   <div className="input-group">
                     <input
@@ -41,8 +75,28 @@ function Footer() {
                       value={letterData}
                       onChange={(e) => setletterData(e.target.value)}
                     />
-                    <button className="btn btn-subscribe bg-dark" type="submit">
-                      <i className="fa fa-arrow-right"></i>
+                    <button
+                      className="btn btn-subscribe bg-dark"
+                      type="submit"
+                      disabled={shouldBtnShow}
+                    >
+                      {loading ? (
+                        <>
+                          <Spinner
+                            animation="border"
+                            role="status"
+                            aria-hidden="true"
+                            as="span"
+                            variant="success"
+                            className="mr-2 d-inline-block"
+                          />
+                          <span className="visually-hidden ">Loading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <i className="fa fa-arrow-right"></i>
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>

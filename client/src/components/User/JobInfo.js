@@ -107,14 +107,14 @@ const WorkNotification = () => {
                         <ul>
                           <li>
                             <i className="dash-icon-box ti-star text-success bg-light-success"></i>{' '}
-                            Jodie Farrell left a review{' '}
+                            <span>{each.creatorname}</span> <br />
+                            {each.message}
                             <div
                               className="numerical-rating high"
                               data-rating="5.0"
                             ></div>{' '}
-                            for
                             <strong>
-                              <Link to="#"> Real Estate Logo</Link>
+                              {each.category} {each.createdAt}
                             </strong>
                             <Link
                               to="#"
@@ -138,14 +138,14 @@ const WorkNotification = () => {
                         <ul>
                           <li>
                             <i className="dash-icon-box ti-star text-success bg-light-success"></i>{' '}
-                            Jodie Farrell left a review{' '}
+                            <span>{each.creatorname}</span> <br />
+                            {each.message}
                             <div
                               className="numerical-rating high"
                               data-rating="5.0"
                             ></div>{' '}
-                            for
                             <strong>
-                              <Link to="#"> Real Estate Logo</Link>
+                              {each.category} {each.createdAt}
                             </strong>
                             <Link
                               to="#"
@@ -169,14 +169,14 @@ const WorkNotification = () => {
                         <ul>
                           <li>
                             <i className="dash-icon-box ti-star text-success bg-light-success"></i>{' '}
-                            Jodie Farrell left a review{' '}
+                            <span>{each.creatorname}</span> <br />
+                            {each.message}
                             <div
                               className="numerical-rating high"
                               data-rating="5.0"
                             ></div>{' '}
-                            for
                             <strong>
-                              <Link to="#"> Real Estate Logo</Link>
+                              {each.category} {each.createdAt}
                             </strong>
                             <Link
                               to="#"

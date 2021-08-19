@@ -33,8 +33,6 @@ import WorkNotification from './components/User/JobInfo'
 
 export const loginStatus = JSON.parse(localStorage.getItem('status'))
 function App() {
-  console.log(process.env.REACT_APP_AUTH_REQUEST_URL)
-  console.log(process.env.REACT_APP_ME)
   const protectRoute1 = (Component) => {
     if (loginStatus) {
       return Component

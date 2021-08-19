@@ -5,42 +5,38 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import CountryDropdown from '../general/CountryDropdown'
 import Footer from '../general/Footer'
-import {
-  ALERT,
-  ERROR,
-  UPDATE_PROFILE_SUCCESS_DEFAULT,
-} from '../State/actionCreator'
+import { ALERT, UPDATE_PROFILE_SUCCESS_DEFAULT } from '../State/actionCreator'
 import { updateUserProfileAction } from '../State/actions'
 import NavigationRoute from './NavigationRoute'
 
 const Profile = () => {
   const dispatch = useDispatch()
 
-  const [userUpdate, setUserUpdate] = useState({
-    fullname: '',
-    username: '',
-    email: '',
-    message: '',
-    accountType: '',
-    password: '',
-    newPassword: '',
-    confirmPassword: '',
-    coverLater: '',
-    aboutUser: '',
-    country: '',
-    photo: '',
-    skill: '',
-    tagline: '',
-  })
-
   const {
     errorMessage,
     successMessage,
     shouldBtnShow,
     loading,
+    userData,
     successAlert,
     errorAlert,
   } = useSelector((state) => state.authReducer)
+  const [userUpdate, setUserUpdate] = useState({
+    fullname: userData.fullname || '',
+    username: userData.username || '',
+    email: userData.email || '',
+    message: userData.message || '',
+    accountType: userData.accountType || '',
+    password: userData.password || '',
+    newPassword: userData.newPassword || '',
+    confirmPassword: userData.confirmPassword || '',
+    coverLater: userData.coverLater || '',
+    aboutUser: userData.aboutUser || '',
+    country: userData.country || '',
+    photo: '',
+    skill: userData.skills || '',
+    tagline: userData.tagline || '',
+  })
 
   const [userResume, setUserResume] = useState({
     email: '',
@@ -198,7 +194,17 @@ const Profile = () => {
                                 className="custom-file-label"
                                 htmlFor="customFile"
                               >
-                                <i className="fa fa-user"></i>
+                                {userData.profilePic.picPath ? (
+                                  <img
+                                    src={userData.profilePic.picPath}
+                                    className="img-fluid rounded"
+                                    alt="team-1"
+                                  />
+                                ) : (
+                                  <>
+                                    <i className="fa fa-user"></i>
+                                  </>
+                                )}
                               </label>
                             </div>
                           </div>

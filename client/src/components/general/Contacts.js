@@ -155,9 +155,9 @@ function Contacts() {
                     <div className="ct_cmp_brief">
                       <h5>Reach Us:</h5>
                       <span>
-                        22 Wilson Market, Montreal
+                        407-472 Rue Saint-Sulpice, NewYork
                         <br />
-                        Canada, HPQCH
+                        United States
                       </span>
                     </div>
                   </div>
@@ -177,7 +177,7 @@ function Contacts() {
                       <i className="fa fa-phone"></i>
                     </div>
                     <div className="ct_cmp_brief">
-                      <h5>Call Us:</h5>
+                      <h5>whatsapp:</h5>
                       <span>+1 6256 258 4759</span>
                     </div>
                   </div>
@@ -238,6 +238,7 @@ function Contacts() {
                             className="form-control with-light"
                             placeholder="Your Name"
                             id="name"
+                            required
                             value={contactData.name}
                             onChange={(e) =>
                               setContactData({
@@ -260,6 +261,7 @@ function Contacts() {
                             placeholder="updicl@gmail.com"
                             id="email"
                             value={contactData.email}
+                            required
                             onChange={(e) =>
                               setContactData({
                                 ...contactData,
@@ -301,6 +303,7 @@ function Contacts() {
                             className="form-control with-light"
                             placeholder="+91 256 584 7863"
                             id="phone"
+                            required
                             value={contactData.phone}
                             onChange={(e) =>
                               setContactData({
@@ -320,6 +323,7 @@ function Contacts() {
                           <textarea
                             id="msg"
                             className="form-control with-light"
+                            required
                             value={contactData.message}
                             onChange={(e) =>
                               setContactData({

@@ -25,6 +25,11 @@ import {
   WORK_NOTIFICATION_DELETE_SUCCESS,
   WORK_NOTIFICATION_FETCH_SUCCESS,
   WORK_NOTIFICATION_FETCH_ERROR,
+  SUCCESS_PROFILE,
+  LETTER_SUCCESS,
+  LETTER_INITIAL,
+  LETTER_ERROR,
+  LETTER_ALERT,
 } from './actionCreator'
 
 const initialState = {
@@ -184,6 +189,17 @@ export const authReducer = (state = initialState, action) => {
         successAlert: true,
         errorAlert: false,
       }
+    case SUCCESS_PROFILE:
+      return {
+        ...state,
+        userData: action.payload.user,
+        errorMessage: '',
+        successMessage: action.payload.message,
+        shouldBtnShow: false,
+        loading: false,
+        successAlert: true,
+        errorAlert: false,
+      }
 
     case ERROR:
       return {
@@ -234,6 +250,52 @@ export const authReducer = (state = initialState, action) => {
         loading: false,
       }
 
+    default:
+      return state
+  }
+}
+
+export const letterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case LETTER_SUCCESS:
+      return {
+        ...state,
+        userData: '',
+        errorMessage: '',
+        successMessage: action.message.message,
+        shouldBtnShow: false,
+        loading: false,
+        successAlert: true,
+        errorAlert: false,
+      }
+    case LETTER_INITIAL:
+      return {
+        ...state,
+        errorAlert: false,
+        shouldBtnShow: true,
+        loading: true,
+        successAlert: false,
+      }
+
+    case LETTER_ALERT:
+      return {
+        ...state,
+        loading: false,
+        shouldBtnShow: false,
+        successAlert: false,
+        errorAlert: false,
+      }
+    case LETTER_ERROR:
+      return {
+        ...state,
+        userData: '',
+        successMessage: '',
+        errorMessage: action.message,
+        shouldBtnShow: false,
+        loading: false,
+        successAlert: false,
+        errorAlert: true,
+      }
     default:
       return state
   }

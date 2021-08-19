@@ -4,6 +4,7 @@ import {
   authReducer,
   transactionReducer,
   notificationReducer,
+  letterReducer,
 } from './reducer'
 
 const reducer = combineReducers({
@@ -11,6 +12,7 @@ const reducer = combineReducers({
   authReducer,
   transactionReducer,
   notificationReducer,
+  letterReducer,
 })
 
 export default reducer

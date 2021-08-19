@@ -37,7 +37,7 @@ const PassReset = () => {
           error: true,
           message: 'Invalid or expired token please register',
         })
-        return window.location.assign('/register')
+        return window.location.assign('/passwordreset')
       }
 
       setPassword({

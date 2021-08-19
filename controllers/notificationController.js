@@ -1,10 +1,11 @@
-const jwt = require('jsonwebtoken')
 const Notification = require('../Schemas/notification')
 
 exports.notificationGetter = (req, res) => {
   const { email } = req.user
 
   Notification.find({ email })
+    .limit(10)
+    .sort({ createdAt: -1 })
     .then((notes) => {
       return res.json(notes)
     })

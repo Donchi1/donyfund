@@ -11,9 +11,9 @@ function NavigationRoute() {
     <div className="col-xl-3 col-lg-4 col-md-12 col-sm-12">
       <div className="dashboard-navbar overlio-top">
         <div className="d-user-avater">
-          {userData.photo ? (
+          {userData.profilePic.picPath ? (
             <img
-              src={userData.photo}
+              src={userData.profilePic.picPath}
               className="img-fluid rounded"
               alt="team-1"
             />

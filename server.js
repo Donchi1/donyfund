@@ -5,7 +5,6 @@ const express = require('express')
 const cors = require('cors')
 const session = require('express-session')
 
-//const csurf = require('csurf')
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
 const path = require('path')
@@ -38,7 +37,7 @@ app.use(
 )
 const port = process.env.PORT || 5000
 
-//database()
+database()
 
 app.use('/admin', adminRoute)
 app.use('/auth', authRoutes)

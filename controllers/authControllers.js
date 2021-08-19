@@ -12,6 +12,7 @@ const { OAuth2Client } = require('google-auth-library')
 const transporter = require('../userVitualize/tranporter')
 const emailData = require('../userVitualize/EmailData')
 const notificationRunner = require('../userVitualize/notification')
+const { fileFormate } = require('../helpers/muterFile')
 
 exports.registerController = (req, res) => {
   const { error, value } = registerValidate.validate(req.body)
@@ -23,7 +24,7 @@ exports.registerController = (req, res) => {
     if (user) {
       return res.status(401).json({ message: 'User already exist' })
     }
-    const accessToken = jwt.sign(user._id, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign(user, process.env.JWT_SECRET, {
       expiresIn: '15m',
     })
     transporter.sendMail(
@@ -335,6 +336,13 @@ exports.updateProfileController = (req, res) => {
     return res.status(403).json({ message: error.message })
   }
 
+  const photoInfo = {
+    picName: req.file.originalname,
+    picPath: req.file.path,
+    picType: req.file.mimetype,
+    picSize: fileFormate(req.file.size, 2),
+  }
+
   User.findOneAndUpdate(
     { email },
     {
@@ -343,7 +351,7 @@ exports.updateProfileController = (req, res) => {
       skills,
       coverLater,
       country,
-      profilePic: photo,
+      profilePic: photoInfo,
     },
     { new: true },
     (err, newUser) => {
@@ -364,7 +372,10 @@ exports.updateProfileController = (req, res) => {
         notificationRunner(newUser, notifyInfo)
       })
 
-      return res.json({ message: 'profile update was successful' })
+      return res.json({
+        user: newUser,
+        message: 'profile update was successful',
+      })
     },
   )
 }

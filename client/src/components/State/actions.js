@@ -12,6 +12,7 @@ import {
   SUCCESS,
   WORK_NOTIFICATION_DELETE_ERROR,
   WORK_NOTIFICATION_DELETE_SUCCESS,
+  SUCCESS_PROFILE,
 } from './actionCreator'
 import { store } from './store'
 
@@ -103,14 +104,20 @@ export const logoutAction = () => {
 }
 
 export const updateUserProfileAction = (userData) => {
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  }
   return Axios.post(
     `${process.env.REACT_APP_AUTH_REQUEST_URL}/update/profile`,
+    config,
     userData,
   )
     .then((res) => {
       const data = res.data
 
-      dispatch({ type: SUCCESS, message: data })
+      dispatch({ type: SUCCESS_PROFILE, payload: data })
     })
     .catch((err) => {
       const { message } = err.response.data

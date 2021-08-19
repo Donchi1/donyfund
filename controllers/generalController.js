@@ -8,7 +8,7 @@ const {
 } = require('../validators/validators')
 
 exports.contactController = (req, res) => {
-  const { error, value } = contactValidator(req.body)
+  const { error, value } = contactValidator.validate(req.body)
 
   if (error || !value) {
     return res.status(422).json({ message: error.message })
@@ -35,7 +35,8 @@ exports.contactController = (req, res) => {
   })
 }
 exports.newsLetterController = (req, res) => {
-  const { error, value } = newsLetterValidator(req.body)
+  const { userData } = req.body
+  const { error, value } = newsLetterValidator.validate(userData)
 
   if (error || !value) {
     return res.status(422).json({ message: error.message })
