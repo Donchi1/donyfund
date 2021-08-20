@@ -3,7 +3,6 @@ require('dotenv').config({
 })
 const express = require('express')
 const cors = require('cors')
-const session = require('express-session')
 
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
@@ -31,22 +30,16 @@ app.use(
 )
 app.use(cookieParser())
 app.use(express.json())
-app.use(
-  session({
-    saveUninitialized: true,
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    cookie: {
-      secure: true,
-      sameSite: 'strict',
-      httpOnly: true,
-    },
-  }),
-)
 
 const port = process.env.PORT || 5000
 
 database()
+app.use('/admin', adminRoute)
+app.use('/auth', authRoutes)
+app.use('/api/notification', notificationRoutes)
+app.use('/api/work', workRoutes)
+app.use('/api/transactions', transactionRoutes)
+app.use('/api/general', generalRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   // let defaultSrc = "default-src 'none'"
@@ -61,12 +54,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(__dirname + '/client/build/index.html')
   })
 }
-app.use('/admin', adminRoute)
-app.use('/auth', authRoutes)
-app.use('/api/notification', notificationRoutes)
-app.use('/api/work', workRoutes)
-app.use('/api/transactions', transactionRoutes)
-app.use('/api/general', generalRoutes)
 app.listen(port, () => {
   console.log(`server is running on port ${port} `)
 })
