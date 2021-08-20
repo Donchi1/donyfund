@@ -264,15 +264,32 @@ export const contactAction = (userData) => {
       dispatch({ type: ERROR, message: error.response.data.message })
     })
 }
-export const newsLetterAction = (userData) => {
+export const newsLetterAction = (userData, letterInfo, setLetterInfo) => {
   return Axios.post(
     `${process.env.REACT_APP_API_REQUEST_URL}/general/newsLetter`,
     { userData },
   )
     .then((res) => {
-      dispatch({ type: SUCCESS, data: res.data })
+      setLetterInfo({
+        ...letterInfo,
+        errorMessage: '',
+        successMessage: res.data,
+        shouldBtnShow: false,
+        loading: false,
+        successAlert: true,
+        errorAlert: false,
+      })
     })
     .catch((error) => {
-      dispatch({ type: ERROR, message: error.response.data.message })
+      const { message } = error.response.data
+      setLetterInfo({
+        ...letterInfo,
+        errorMessage: message,
+        successMessage: '',
+        shouldBtnShow: false,
+        loading: false,
+        successAlert: false,
+        errorAlert: true,
+      })
     })
 }

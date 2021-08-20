@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { ALERT, NORMAL } from '../State/actionCreator'
 import { contactAction } from '../State/actions'
 import Footer from './Footer'
+import Header from './Header'
 
 function Contacts() {
   const [contactData, setContactData] = useState({
@@ -45,53 +46,7 @@ function Contacts() {
 
   return (
     <div id="main-wrapper">
-      <div className="header header-light">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <nav id="navigation" className="navigation navigation-portrait">
-                <div className="nav-header">
-                  <a className="nav-brand static-logo" href="/">
-                    <img src="/assets/cover.png" className="logo" alt="logo" />
-                  </a>
-
-                  <div className="nav-toggle"></div>
-                </div>
-                <div className="nav-menus-wrapper">
-                  <span className="nav-menus-wrapper-close-button">✕</span>
-                  <ul className="nav-menu">
-                    <li>
-                      <a href="/">Home</a>
-                    </li>
-
-                    <li>
-                      <a href="/about">About</a>
-                    </li>
-
-                    <li className="active">
-                      <a href="/contact">Contact Us</a>
-                    </li>
-                  </ul>
-
-                  <ul className="nav-menu nav-menu-social align-to-right">
-                    <li className="add-listing ml-2 ml-0-sm">
-                      <a href="/register">
-                        <i className="ti-user mr-1"></i> Register
-                      </a>
-                    </li>
-                    <span className="mx-2 mt-sm-2"></span>
-                    <li className="add-listing">
-                      <a href="/login">
-                        <i className="ti-user mr-1"></i> Sign in
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header headerStyle={'header header-light'} />
 
       <div className="clearfix"></div>
 

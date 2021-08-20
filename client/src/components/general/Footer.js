@@ -1,18 +1,25 @@
 import React, { useState } from 'react'
 import { Alert, Spinner } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { Link } from 'react-router-dom'
-import { LETTER_ALERT, LETTER_INITIAL } from '../State/actionCreator'
+
 import { newsLetterAction } from '../State/actions'
 
 function Footer() {
+  const [letterInfo, setLetterInfo] = useState({
+    errorMessage: '',
+    successMessage: '',
+    shouldBtnShow: false,
+    loading: false,
+    successAlert: false,
+    errorAlert: false,
+  })
   const [letterData, setletterData] = useState('')
-  const dispatch = useDispatch()
 
   const handleSubscribe = (e) => {
     e.preventDefault()
-    dispatch({ type: LETTER_INITIAL })
-    newsLetterAction(letterData)
+    setLetterInfo({ ...letterInfo, loading: true, shouldBtnShow: true })
+    newsLetterAction(letterData, letterInfo, setLetterInfo)
     return setletterData('')
   }
 
@@ -23,7 +30,7 @@ function Footer() {
     loading,
     successAlert,
     errorAlert,
-  } = useSelector((state) => state.letterReducer)
+  } = letterInfo
 
   return (
     <>
@@ -52,7 +59,13 @@ function Footer() {
                     variant="success"
                     show={successAlert}
                     dismissible
-                    onClose={() => dispatch({ type: LETTER_ALERT })}
+                    onClose={() =>
+                      setLetterInfo({
+                        ...letterInfo,
+                        errorAlert: false,
+                        successAlert: false,
+                      })
+                    }
                   >
                     {successMessage}
                   </Alert>
@@ -61,7 +74,13 @@ function Footer() {
                     dismissible
                     variant="danger"
                     show={errorAlert}
-                    onClose={() => dispatch({ type: LETTER_ALERT })}
+                    onClose={() =>
+                      setLetterInfo({
+                        ...letterInfo,
+                        errorAlert: false,
+                        successAlert: false,
+                      })
+                    }
                   >
                     {errorMessage}
                   </Alert>
@@ -73,6 +92,7 @@ function Footer() {
                       className="form-control large"
                       placeholder="Enter your mail here"
                       autoComplete="true"
+                      required
                       value={letterData}
                       onChange={(e) => setletterData(e.target.value)}
                     />
