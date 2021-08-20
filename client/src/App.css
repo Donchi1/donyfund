@@ -1,3 +1,18 @@
+.loader-sub {
+  border: 2px solid blue;
+  border-radius: 50%;
+  width: 50%;
+  height: 40vh;
+  margin: auto;
+}
+.loader-sub-1 {
+  border: 2px solid rgb(32, 32, 170);
+  border-radius: 50%;
+  width: 40%;
+  height: 30vh;
+  margin: auto;
+}
+
 @media screen and (max-width: 750px) {
   .breadcrumb {
     background-color: black !important;

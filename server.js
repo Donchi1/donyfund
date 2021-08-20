@@ -23,11 +23,7 @@ app.use(
     contentSecurityPolicy: false,
   }),
 )
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-  }),
-)
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 
@@ -42,13 +38,6 @@ app.use('/api/transactions', transactionRoutes)
 app.use('/api/general', generalRoutes)
 
 if (process.env.NODE_ENV === 'production') {
-  // let defaultSrc = "default-src 'none'"
-  // let formSrc = "form-action 'self'"
-  // let scriptSrc = "script-src 'self'"
-  // scriptSrc += 'https://themezhub.net'
-  // let csp = [defaultSrc, formSrc, scriptSrc].join(';')
-  //app.use(expressCspHeader())
-
   app.use(express.static(path.resolve(__dirname, './client/build')))
   app.get('*', (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html')

@@ -7,6 +7,7 @@ const notificationRunner = (user, data) => {
     type: data.type,
     email: user.email,
     status: data.status,
+    id: user.id,
   })
   return realNote.save()
 }

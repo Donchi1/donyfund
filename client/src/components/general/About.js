@@ -58,7 +58,7 @@ function About() {
             {/* Single Box */}
             <div className="col-lg-6 col-md-6 col-sm-12">
               <div className="about-captione">
-                <h6 className="text-blue">About Workoo</h6>
+                <h6 className="text-blue">About Donyfund</h6>
                 <h2>
                   Let's Short Story About donyfund
                   <br />

@@ -70,6 +70,7 @@ exports.loginController = (req, res) => {
           const notifyInfo = {
             message: 'Welcome to donyfund a platform for your easy work',
             type: 'Welcome',
+            status: 'success',
           }
 
           res.cookie('token', accessToken, {
@@ -82,7 +83,7 @@ exports.loginController = (req, res) => {
             message: 'login successful',
             loginStatus: true,
           })
-          return notificationRunner(user, notifyInfo.message, notifyInfo.type)
+          return notificationRunner(user, notifyInfo)
         } else {
           return res.status(401).json({
             message: 'Incorrect password: check the password and retry',
