@@ -19,7 +19,7 @@ const contactSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    file: String,
+
     company: String,
   },
   { timestamp: true },

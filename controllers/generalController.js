@@ -35,8 +35,8 @@ exports.contactController = (req, res) => {
   })
 }
 exports.newsLetterController = (req, res) => {
-  const { userData } = req.body
-  const { error, value } = newsLetterValidator.validate(userData)
+  const { email } = req.body
+  const { error, value } = newsLetterValidator.validate({ email })
 
   if (error || !value) {
     return res.status(422).json({ message: error.message })

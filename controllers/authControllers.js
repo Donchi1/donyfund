@@ -15,20 +15,37 @@ const notificationRunner = require('../userVitualize/notification')
 const { fileFormate } = require('../helpers/muterFile')
 
 exports.registerController = (req, res) => {
-  const { error, value } = registerValidate.validate(req.body)
+  const {
+    email,
+    fullname,
+    password,
+    username,
+    occupation,
+    country,
+    gender,
+  } = req.body
+  const { error, value } = registerValidate.validate({
+    email,
+    fullname,
+    password,
+    username,
+    occupation,
+    country,
+    gender,
+  })
   if (error) {
     return res.status(422).json({ message: error.message })
   }
 
-  User.findOne({ email: value.email }).exec((error, user) => {
+  User.findOne({ email }).exec((error, user) => {
     if (user) {
       return res.status(401).json({ message: 'User already exist' })
     }
-    const accessToken = jwt.sign(user, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign({ fullname, email }, process.env.JWT_SECRET, {
       expiresIn: '15m',
     })
     transporter.sendMail(
-      emailData.activation(value, accessToken),
+      emailData.activation(email, accessToken),
       (error, info) => {
         if (error || !info) {
           return res.status(400).json({
@@ -36,7 +53,7 @@ exports.registerController = (req, res) => {
           })
         }
         return res.json(
-          `An account activation email has been sent to ${value.email}, activate within 15mins`,
+          `An account activation email has been sent to ${email}, activate within 15mins`,
         )
       },
     )
@@ -76,7 +93,7 @@ exports.loginController = (req, res) => {
           res.cookie('token', accessToken, {
             httpOnly: true,
             sameSite: 'strict',
-            secured: false,
+            secured: true,
           })
 
           res.json({

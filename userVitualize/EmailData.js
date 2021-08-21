@@ -1,7 +1,7 @@
 const emailData = {
-  activation: (value, accessToken) => ({
+  activation: (email, accessToken) => ({
     from: process.env.EMAIL_SENDER,
-    to: value.email,
+    to: email,
     subject: 'Account Activation Link',
     html: `<h1>Please click on this to activate your account</h1>
                     <p>${process.env.CLIENT_URL}/user/activate/${accessToken}</p>

@@ -83,7 +83,7 @@ exports.withdrawalValidator = Joi.object({
 exports.contactValidator = Joi.object({
   email: Joi.string().email().required().trim(),
   name: Joi.string().required(),
-  file: Joi.string().optional(),
+
   message: Joi.string().required(),
   company: Joi.string().optional(),
   phone: Joi.string().required(),
