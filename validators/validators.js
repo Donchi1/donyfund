@@ -11,7 +11,7 @@ exports.registerValidate = Joi.object({
   email: Joi.string().email().required(),
   fullname: Joi.string().required(),
   occupation: Joi.string().required().min(3).max(15),
-  country: Joi.string().required().min(3).max(15),
+  country: Joi.string().required(),
   password: Joi.string().alphanum().required().max(30).min(5).strict().trim(),
   gender: Joi.string().required(),
 })
@@ -77,7 +77,7 @@ exports.withdrawalValidator = Joi.object({
   amount: Joi.number().required().max(1000).min(100),
   type: Joi.string().required().trim(),
   email: Joi.string().email().trim(),
-  wallet: Joi.string().alphanum().min(30).max(36),
+  wallet: Joi.string().alphanum().min(30).max(80),
 })
 
 exports.contactValidator = Joi.object({

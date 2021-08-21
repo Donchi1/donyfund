@@ -41,9 +41,13 @@ exports.registerController = (req, res) => {
     if (user) {
       return res.status(401).json({ message: 'User already exist' })
     }
-    const accessToken = jwt.sign({ fullname, email }, process.env.JWT_SECRET, {
-      expiresIn: '15m',
-    })
+    const accessToken = jwt.sign(
+      { fullname, email, password, country, occupation, gender, username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '15m',
+      },
+    )
     transporter.sendMail(
       emailData.activation(email, accessToken),
       (error, info) => {
