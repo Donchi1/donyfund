@@ -115,7 +115,7 @@ function About() {
                     <i className="ti-agenda"></i>
                   </div>
                   <h4>
-                    <span className="cto">9.8</span>M
+                    <span className="cto count">9.8</span>M
                   </h4>
                   <p>Listing Posted</p>
                 </div>
@@ -129,7 +129,7 @@ function About() {
                     <i className="ti-user"></i>
                   </div>
                   <h4>
-                    <span className="cto">200</span>K
+                    <span className="cto count">200</span>K
                   </h4>
                   <p>Total Authors</p>
                 </div>
@@ -143,7 +143,7 @@ function About() {
                     <i className="ti-medall-alt"></i>
                   </div>
                   <h4>
-                    <span className="cto">99</span>K
+                    <span className="cto count">99</span>K
                   </h4>
                   <p>Win Awards</p>
                 </div>
@@ -157,7 +157,7 @@ function About() {
                     <i className="ti-face-smile"></i>
                   </div>
                   <h4>
-                    <span className="cto">7.2</span>M
+                    <span className="cto count">7.2</span>M
                   </h4>
                   <p>Happy Clients</p>
                 </div>
@@ -187,54 +187,13 @@ function About() {
 
           <div className="row justify-content-center">
             {/* Single */}
-            <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-              <div className="team-grid">
-                <div className="teamgrid-user">
-                  <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-1.jpg"
-                    alt="team-1"
-                    className="img-fluid"
-                  />
-                </div>
-
-                <div className="teamgrid-content">
-                  <h4>Rahul Gilkrist</h4>
-                  <span>App Designer</span>
-                </div>
-
-                <div className="teamgrid-social">
-                  <ul>
-                    <li>
-                      <Link to="#" className="f-cl" tabIndex="0">
-                        <i className="ti-facebook"></i>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="t-cl" tabIndex="0">
-                        <i className="ti-twitter"></i>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="i-cl" tabIndex="0">
-                        <i className="ti-instagram"></i>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" className="l-cl" tabIndex="0">
-                        <i className="ti-linkedin"></i>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
 
             {/* Single */}
             <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-2.jpg"
+                    src="/assets/teamw-3.jpg"
                     alt="team-2"
                     className="img-fluid"
                   />
@@ -277,7 +236,7 @@ function About() {
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-3.jpg"
+                    src="/assets/team-m.jpg"
                     alt="team-3"
                     className="img-fluid"
                   />
@@ -320,7 +279,7 @@ function About() {
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-4.jpg"
+                    src="/assets/teamw.jpg"
                     alt="team-4"
                     className="img-fluid"
                   />
@@ -363,7 +322,7 @@ function About() {
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-5.jpg"
+                    src="/assets/team.jpg"
                     alt="team-5"
                     className="img-fluid"
                   />
@@ -406,14 +365,14 @@ function About() {
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-1.jpg"
+                    src="/assets/teamw1.jpg"
                     alt="team-1"
                     className="img-fluid"
                   />
                 </div>
 
                 <div className="teamgrid-content">
-                  <h4>Adam Wilcard</h4>
+                  <h4>Adam Olivia</h4>
                   <span>Developer</span>
                 </div>
 
@@ -449,7 +408,7 @@ function About() {
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-2.jpg"
+                    src="/assets/teamw-4.jpg"
                     alt="team-2"
                     className="img-fluid"
                   />
@@ -492,7 +451,7 @@ function About() {
               <div className="team-grid">
                 <div className="teamgrid-user">
                   <img
-                    src="https://themezhub.net/workoo-demo/workoo/assets/img/team-3.jpg"
+                    src="/assets/team-m-4.jpg"
                     alt="team-3"
                     className="img-fluid"
                   />

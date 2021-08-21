@@ -41,7 +41,7 @@ function Home() {
                   How It <span className="theme-cl-2">Works?</span>
                 </h2>
                 <p>
-                  We stand out as one great plateform to make you established
+                  We stand out as one great platform to make you established
                   without much struggles..
                 </p>
               </div>
@@ -108,11 +108,12 @@ function Home() {
           <div className="row">
             <div className="col-md-6 col-sm-6 bl-dark">
               <div className="call-to-act-caption">
-                <h2>Start now as an expert or beginner to work from home.</h2>
+                <h2>Work from home as an expert or beginner. Start now!!</h2>
                 <h3>
                   {' '}
-                  Are an Expert or beginner in working from home here is a great
-                  start for you. Make your wealth in due time without stress.
+                  Are you an Expert or beginner in working from home or online?
+                  here is a great start for you. Make your wealth in due time
+                  without stress.
                 </h3>
                 <a href="/register" className="btn bat-call-to-act">
                   Start Up
@@ -296,7 +297,7 @@ function Home() {
                     <i className="ti-agenda"></i>
                   </div>
                   <h4>
-                    <span className="cto">9.8</span>M
+                    <span className="cto count">9.8</span>M
                   </h4>
                   <p>Listing Posted</p>
                 </div>
@@ -310,7 +311,7 @@ function Home() {
                     <i className="ti-user"></i>
                   </div>
                   <h4>
-                    <span className="cto">200</span>K
+                    <span className="cto count">200</span>K
                   </h4>
                   <p>Total Authors</p>
                 </div>
@@ -324,7 +325,7 @@ function Home() {
                     <i className="ti-medall-alt"></i>
                   </div>
                   <h4>
-                    <span className="cto">99</span>K
+                    <span className="cto count">99</span>K
                   </h4>
                   <p>Win Awards</p>
                 </div>
@@ -338,7 +339,7 @@ function Home() {
                     <i className="ti-face-smile"></i>
                   </div>
                   <h4>
-                    <span className="cto">7.2</span>M
+                    <span className="cto count">7.2</span>M
                   </h4>
                   <p>Happy Clients</p>
                 </div>

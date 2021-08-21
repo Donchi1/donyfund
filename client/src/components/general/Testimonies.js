@@ -49,7 +49,7 @@ function Testimonies({ styleProp }) {
                   <div className="st-author-box">
                     <div className="st-author-thumb">
                       <img
-                        src="https://themezhub.net/workoo-demo/workoo/assets/img/team-3.jpg"
+                        src="/assets/person-2.jpg"
                         className="img-fluid"
                         alt="team-3"
                       />
@@ -65,8 +65,8 @@ function Testimonies({ styleProp }) {
                 <div className="smart-tes-content">
                   <p>
                     I got my work done with ease and at giving time without
-                    stress or durex. It was so nice working with donyfund and so
-                    happy.
+                    stress or struggle. It was so nice working with donyfund and
+                    so happy.
                   </p>
                 </div>
               </div>
@@ -206,7 +206,7 @@ function Testimonies({ styleProp }) {
                   <div className="st-author-box">
                     <div className="st-author-thumb">
                       <img
-                        src="https://themezhub.net/workoo-demo/workoo/assets/img/team-4.jpg"
+                        src="/assets/person-1.jpg"
                         className="img-fluid"
                         alt="team-4"
                       />
@@ -258,7 +258,7 @@ function Testimonies({ styleProp }) {
                   <div className="st-author-box">
                     <div className="st-author-thumb">
                       <img
-                        src="https://themezhub.net/workoo-demo/workoo/assets/img/team-2.jpg"
+                        src="/assets/person-3.jpg"
                         className="img-fluid"
                         alt="team-2"
                       />

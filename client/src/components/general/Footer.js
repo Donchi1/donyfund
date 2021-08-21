@@ -138,7 +138,7 @@ function Footer() {
                     alt="logo"
                   />
                   <p>
-                    407-472 Rue Saint-Sulpice, NewYork
+                   24 Brooklyn queen NewYork 
                     <br />
                     United States
                   </p>
@@ -209,7 +209,7 @@ function Footer() {
               <div className="col-lg-4 col-md-4 mt-5">
                 <h4 className="widget-title">locate Us</h4>
                 <iframe
-                  src="https://maps.google.com/maps?q=407-472%20Rue%20Saint-Sulpice,%20NewYork%20United%20States&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  src="https://maps.google.com/maps?width=600&amp;height=1284&amp;hl=en&amp;q=24 Brooklyn queen NewYork United States&amp;t=&amp;z=18&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                   height="150"
                   style={{ border: '0', width: '100%' }}
                   title="Donyfund Location"

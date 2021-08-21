@@ -110,7 +110,7 @@ function Contacts() {
                     <div className="ct_cmp_brief">
                       <h5>Reach Us:</h5>
                       <span>
-                        407-472 Rue Saint-Sulpice, NewYork
+                        24 Brooklyn queen NewYork
                         <br />
                         United States
                       </span>
@@ -132,8 +132,8 @@ function Contacts() {
                       <i className="fa fa-phone"></i>
                     </div>
                     <div className="ct_cmp_brief">
-                      <h5>whatsapp:</h5>
-                      <span>+1 6256 258 4759</span>
+                      <h5>Whatsapp:</h5>
+                      <span>+1 625 258 4759</span>
                     </div>
                   </div>
                 </div>
