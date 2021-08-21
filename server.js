@@ -6,7 +6,6 @@ const cors = require('cors')
 
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
-const path = require('path')
 
 const authRoutes = require('./routes/authRoutes')
 const notificationRoutes = require('./routes/notificationRoutes')
@@ -37,12 +36,6 @@ app.use('/api/work', workRoutes)
 app.use('/api/transactions', transactionRoutes)
 app.use('/api/general', generalRoutes)
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.resolve(__dirname, './client/build')))
-  app.get('*', (req, res) => {
-    res.sendFile(__dirname + '/client/build/index.html')
-  })
-}
 app.listen(port, () => {
   console.log(`server is running on port ${port} `)
 })
