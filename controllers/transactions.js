@@ -1,4 +1,3 @@
-const fs = require('fs')
 const cardData = require('../Schemas/paymentSchema')
 const prove = require('../Schemas/payProveSchema')
 
@@ -13,7 +12,7 @@ const {
 const { fileFormate } = require('./authControllers')
 
 exports.paymentProveController = (req, res) => {
-  const { email } = req.user
+  const { email, _id } = req.user
 
   const photoInfo = {
     picName: req.file.originalname,
@@ -23,7 +22,7 @@ exports.paymentProveController = (req, res) => {
   }
 
   const provefile = new prove({
-    id,
+    id: _id,
     email,
     proveImg: photoInfo,
   })
@@ -117,7 +116,7 @@ exports.withdrawalController = (req, res) => {
     return res.status(422).json({ message: error.message })
   }
 
-  if (email === req.user.email) {
+  if (email !== req.user.email) {
     return res
       .status(403)
       .json('Error: Email must be equal to the reqistered email')
@@ -147,10 +146,10 @@ exports.withdrawalController = (req, res) => {
       if (error || !success) {
         return res.status(422).json({ message: error.message })
       }
-    })
 
-    return res.json(
-      `Hi ${user.name} wait for 24 hours while we process your withdrawal`,
-    )
+      return res.json(
+        `Hi ${user.name} wait for 24 hours while we process your withdrawal`,
+      )
+    })
   })
 }

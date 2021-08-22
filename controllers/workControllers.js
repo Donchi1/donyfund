@@ -9,7 +9,7 @@ const { workNotificationRunner } = require('../userVitualize/workData')
 exports.workNotificationDeleteController = (req, res) => {
   const id = req.params.id
   workNotification
-    .findByIdAndDelete(id)
+    .findOneAndDelete({ _id: id })
     .then((workNotes) => {
       const articleNotes = workNotes.filter(
         (notes) => notes.category === 'article',

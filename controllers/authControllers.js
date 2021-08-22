@@ -24,7 +24,7 @@ exports.registerController = (req, res) => {
     country,
     gender,
   } = req.body
-  const { error, value } = registerValidate.validate({
+  const { error } = registerValidate.validate({
     email,
     fullname,
     password,
@@ -127,44 +127,47 @@ exports.activateController = (req, res) => {
       return res
         .status(402)
         .json({ message: 'Expired token please sign up again' })
-    } else {
-      const {
-        fullname,
-        username,
-        password,
-        email,
-        gender,
-        country,
-        occupation,
-      } = decoded
+    }
+    const {
+      fullname,
+      username,
+      password,
+      email,
+      gender,
+      country,
+      occupation,
+    } = decoded
 
-      const user = new User({
-        fullname,
-        username,
-        email,
-        gender,
-        country,
-        occupation,
-        hashed_password: bcrypt.hashSync(password, 10),
-        token,
-      })
+    const user = new User({
+      fullname,
+      username,
+      email,
+      gender,
+      country,
+      occupation,
+      hashed_password: bcrypt.hashSync(password, 10),
+      token,
+    })
 
-      user
-        .save()
-        .then(() => {
-          transporter.sendMail(emailData.welcome(user), (error, success) => {
-            if (error || !success) {
-              return res.status(422).json({ message: error.message })
-            }
-          })
-          res.json(
+    user
+      .save()
+      .then((data) => {
+        transporter.sendMail(emailData.welcome(data), (error, success) => {
+          if (error || !success) {
+            User.findOneAndDelete({ email }).then(() => {
+              return res.status(422).json({
+                message: 'Error: please check your network and try again',
+              })
+            })
+          }
+          return res.json(
             ' Your Email Activation Was Successful Login Now To Start Working',
           )
         })
-        .catch((error) => {
-          res.status(401).json({ message: error.message })
-        })
-    }
+      })
+      .catch((error) => {
+        res.status(401).json({ message: error.message })
+      })
   })
 }
 
@@ -177,24 +180,33 @@ exports.passwordResetController = (req, res) => {
     return res.status(422).json({ message: error.message })
   }
 
-  User.findOne({ email }).exec((err, user) => {
+  User.findOne({ email }, (err, user) => {
     if (err || !user) {
-      res.status(404).json({ message: 'user with this email does not exist' })
+      res.status(400).json({ message: 'User with this email does not exist' })
     } else {
-      const token = jwt.sign({ id: user.id }, process.env.JWT_RESET, {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_RESET, {
         exp: '10m',
       })
 
-      transporter
-        .sendMail(emailData.passwordResetLink(user, token))
-        .then(() => {
-          return res.json(
-            `A password reset email has been sent to ${email} expires in 10m`,
-          )
-        })
-        .catch((err) => {
-          return res.status(422).json({ message: err.message })
-        })
+      return user.findOneAndUpdate(
+        { email },
+        { activationLink: token },
+        (err, data) => {
+          if (err) {
+            return res.status(422).json({ message: 'Error please try again' })
+          }
+          transporter
+            .sendMail(emailData.passwordResetLink(user, token))
+            .then(() => {
+              return res.json(
+                `A password reset email has been sent to ${email} expires in 10m`,
+              )
+            })
+            .catch((err) => {
+              return res.status(422).json({ message: err.message })
+            })
+        },
+      )
     }
   })
 }
@@ -215,48 +227,49 @@ exports.passwordUpdateController = (req, res) => {
     if (error || !decoded) {
       return res.status(403).json({ message: 'invalid or expired token' })
     }
-    bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
-      if (err) {
-        return res.status(401).json({ message: 'An error occured' })
-      }
-      User.findOne({ id: decoded.id })
-        .then((user) => {
-          user.password = hashedPassword
-          user
-            .save()
-            .then(() => {
-              transporter
-                .sendMail(emailData.passwordResetSuccess(user.email))
-                .then(() => {
-                  const notifyInfo = {
-                    message: 'Your password reset was successful',
-                    type: 'Password Reset',
-                    status: 'success',
-                  }
 
-                  notificationRunner(user, notifyInfo)
+    User.findOne({ _id: decoded.id })
+      .then((user) => {
+        if (user.activationLink !== token) {
+          return res.json({
+            message: 'Invalid or expired token. Please try again',
+          })
+        }
+        user.hashed_password = bcrypt.hashSync(newPassword, 10)
+        user
+          .save()
+          .then(() => {
+            transporter
+              .sendMail(emailData.passwordResetSuccess(user.email))
+              .then(() => {
+                const notifyInfo = {
+                  message: 'Your password reset was successful',
+                  type: 'Password Reset',
+                  status: 'success',
+                }
 
-                  return res.json('Wow! Your password reset was a success.')
-                })
-                .catch((err) => {
-                  const notifyInfo = {
-                    message: 'Your password reset was unsuccessful',
-                    type: 'Password Reset Error',
-                    status: 'error',
-                  }
+                notificationRunner(user, notifyInfo)
 
-                  notificationRunner(user, notifyInfo)
-                  return res.status(422).json({ message: err.message })
-                })
-            })
-            .catch((err) => {
-              return res.status(422).json({ message: err.message })
-            })
-        })
-        .catch(() => {
-          return res.status(403).json({ message: err.message })
-        })
-    })
+                return res.json('Wow! Your password reset was a success.')
+              })
+              .catch((err) => {
+                const notifyInfo = {
+                  message: 'Your password reset was unsuccessful',
+                  type: 'Password Reset Error',
+                  status: 'error',
+                }
+
+                notificationRunner(user, notifyInfo)
+                return res.status(422).json({ message: err.message })
+              })
+          })
+          .catch((err) => {
+            return res.status(422).json({ message: err.message })
+          })
+      })
+      .catch(() => {
+        return res.status(403).json({ message: err.message })
+      })
   })
 }
 const client = new OAuth2Client(process.env.GOOGLE_AUTH_CLIENT)
@@ -265,40 +278,59 @@ exports.googleLoginController = (req, res) => {
   client
     .verifyIdToken({ tokenId, audience: process.env.GOOGLE_AUTH_CLIENT })
     .then((response) => {
-      const { email_verified, email, name, picture } = response.payload
+      const {
+        email_verified,
+        email,
+        name,
+        picture,
+        username,
+        gender,
+        country,
+      } = response.payload
 
       if (email_verified) {
-        User.findOne({ email }).then((user) => {
-          if (user) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-              expiresIn: '7d',
-            })
+        User.findOne({ email }).then((userData) => {
+          if (userData) {
+            const token = jwt.sign(
+              { id: userData._id },
+              process.env.JWT_SECRET,
+              {
+                expiresIn: '7d',
+              },
+            )
             res.cookie('token', token, {
               httpOnly: true,
               secure: true,
               sameSite: 'strict',
             })
-            transporter.sendMail(emailData.welcome(user), (err, success) => {
-              if (err || !success) {
-                res.status(403).json({ message: err.message })
-              }
-              const notifyInfo = {
-                message: 'Welcome to donyfund a platform for your easy work',
-                type: 'Welcome',
-                status: 'info',
-              }
+            transporter.sendMail(
+              emailData.welcome(userData),
+              (err, success) => {
+                if (err || !success) {
+                  return res.status(403).json({ message: err.message })
+                }
+                const notifyInfo = {
+                  message: 'Welcome to donyfund a platform for your easy work',
+                  type: 'Welcome',
+                  status: 'info',
+                }
 
-              notificationRunner(user, notifyInfo)
-            })
+                notificationRunner(user, notifyInfo)
 
-            return res.json({ message: 'login success', loginStatus: true })
+                return res.json({ message: 'login success', loginStatus: true })
+              },
+            )
           } else {
             const password = name + process.env.JWT_SECRET
             const user = new User({
               fullname: name,
-              password,
+              hashed_password: password,
               email,
+              gender: gender || 'male',
+              country: country || 'Us',
+              occupation: 'freelencer',
               profilePic: picture,
+              username: username || 'John Doe',
             })
             user.save((err, user) => {
               if (err) {
@@ -321,13 +353,16 @@ exports.googleLoginController = (req, res) => {
 
               notificationRunner(user, notifyInfo)
 
-              return res.json({ message: 'login success' })
+              return res.json({ message: 'login success', loginStatus: true })
             })
           }
         })
       } else {
         res.status(400).json('Google login failed login again')
       }
+    })
+    .catch((err) => {
+      return res.json({ message: err.message })
     })
 }
 

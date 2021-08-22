@@ -10,9 +10,9 @@ const emailData = {
                     <p>${process.env.CLIENT_URL}</p>
              `,
   }),
-  passwordResetLink: (value, accessToken) => ({
+  passwordResetLink: (user, accessToken) => ({
     from: process.env.EMAIL_SENDER,
-    to: value.email,
+    to: user.email,
     subject: 'Password Reset Link',
     html: `<h1>Click on the link to reset your password</h1>
                     <p>${
