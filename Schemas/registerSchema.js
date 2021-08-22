@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,7 +25,6 @@ const userSchema = new mongoose.Schema(
     hashed_password: {
       type: String,
       required: true,
-      trim: true,
     },
     country: {
       type: String,
@@ -60,16 +58,6 @@ const userSchema = new mongoose.Schema(
   },
   { timeStamp: true },
 )
-
-userSchema
-  .virtual('password')
-  .set(async function (password) {
-    this.password = password
-    this.hashed_password = await bcrypt.hash(password, 10)
-  })
-  .get(function () {
-    return this.hashed_password
-  })
 
 const User = mongoose.model('User', userSchema)
 

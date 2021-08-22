@@ -85,7 +85,7 @@ exports.loginController = (req, res) => {
     )
 
     bcrypt
-      .compare(password, user.password)
+      .compare(password, user.hashed_password)
       .then((info) => {
         if (info) {
           const notifyInfo = {
@@ -145,7 +145,7 @@ exports.activateController = (req, res) => {
         gender,
         country,
         occupation,
-        password,
+        hashed_password: bcrypt.hashSync(password, 10),
         token,
       })
 
