@@ -12,14 +12,12 @@ const userSchema = new mongoose.Schema(
     fullname: {
       type: String,
       required: true,
-      trim: true,
       lowercase: true,
     },
 
     username: {
       type: String,
       required: true,
-      trim: true,
       lowercase: true,
     },
     hashed_password: {
@@ -29,7 +27,6 @@ const userSchema = new mongoose.Schema(
     country: {
       type: String,
       required: true,
-      trim: true,
       lowercase: true,
     },
     gender: {
@@ -40,7 +37,6 @@ const userSchema = new mongoose.Schema(
     },
     occupation: {
       type: String,
-      trim: true,
       lowercase: true,
       requied: true,
     },
@@ -54,7 +50,6 @@ const userSchema = new mongoose.Schema(
     aboutUser: String,
     failedJobs: Number,
     activationLink: '',
-    accesstoken: '',
   },
   { timeStamp: true },
 )

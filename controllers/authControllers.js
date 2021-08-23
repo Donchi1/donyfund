@@ -146,7 +146,6 @@ exports.activateController = (req, res) => {
       country,
       occupation,
       hashed_password: bcrypt.hashSync(password, 10),
-      token,
     })
 
     user
@@ -165,8 +164,10 @@ exports.activateController = (req, res) => {
           )
         })
       })
-      .catch((error) => {
-        res.status(401).json({ message: error.message })
+      .catch(() => {
+        res
+          .status(401)
+          .json({ message: 'Error while activating user. Please try again' })
       })
   })
 }
@@ -182,32 +183,24 @@ exports.passwordResetController = (req, res) => {
 
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
-      res.status(400).json({ message: 'User with this email does not exist' })
-    } else {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_RESET, {
-        exp: '10m',
-      })
-
-      return user.findOneAndUpdate(
-        { email },
-        { activationLink: token },
-        (err, data) => {
-          if (err) {
-            return res.status(422).json({ message: 'Error please try again' })
-          }
-          transporter
-            .sendMail(emailData.passwordResetLink(user, token))
-            .then(() => {
-              return res.json(
-                `A password reset email has been sent to ${email} expires in 10m`,
-              )
-            })
-            .catch((err) => {
-              return res.status(422).json({ message: err.message })
-            })
-        },
-      )
+      return res
+        .status(400)
+        .json({ message: 'User with this email does not exist' })
     }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_RESET, {
+      exp: '10m',
+    })
+
+    transporter
+      .sendMail(emailData.passwordResetLink(user, token))
+      .then(() => {
+        return res.json(
+          `A password reset email has been sent to ${email} expires in 10m`,
+        )
+      })
+      .catch((err) => {
+        return res.status(422).json({ message: err.message })
+      })
   })
 }
 
@@ -225,51 +218,43 @@ exports.passwordUpdateController = (req, res) => {
 
   jwt.verify(token, process.env.JWT_RESET, (error, decoded) => {
     if (error || !decoded) {
-      return res.status(403).json({ message: 'invalid or expired token' })
+      return res.status(403).json({ message: 'Invalid or expired token' })
     }
-
-    User.findOne({ _id: decoded.id })
-      .then((user) => {
-        if (user.activationLink !== token) {
-          return res.json({
-            message: 'Invalid or expired token. Please try again',
-          })
+    const hashed_password = bcrypt.hashSync(newPassword, 10)
+    User.findOneAndUpdate(
+      { _id: decoded.id },
+      { hashed_password },
+      (error, user) => {
+        if (error) {
+          return res.status(422).json({ message: error.message })
         }
-        user.hashed_password = bcrypt.hashSync(newPassword, 10)
-        user
-          .save()
+        transporter
+          .sendMail(emailData.passwordResetSuccess(user.email))
           .then(() => {
-            transporter
-              .sendMail(emailData.passwordResetSuccess(user.email))
-              .then(() => {
-                const notifyInfo = {
-                  message: 'Your password reset was successful',
-                  type: 'Password Reset',
-                  status: 'success',
-                }
+            const notifyInfo = {
+              message: 'Your password reset was successful',
+              type: 'Password Reset',
+              status: 'success',
+            }
 
-                notificationRunner(user, notifyInfo)
+            notificationRunner(user, notifyInfo)
 
-                return res.json('Wow! Your password reset was a success.')
-              })
-              .catch((err) => {
-                const notifyInfo = {
-                  message: 'Your password reset was unsuccessful',
-                  type: 'Password Reset Error',
-                  status: 'error',
-                }
-
-                notificationRunner(user, notifyInfo)
-                return res.status(422).json({ message: err.message })
-              })
+            return res.json('Wow! Your password reset was a success.')
           })
-          .catch((err) => {
-            return res.status(422).json({ message: err.message })
+          .catch(() => {
+            const notifyInfo = {
+              message: 'Your password reset was unsuccessful',
+              type: 'Password Reset Error',
+              status: 'error',
+            }
+
+            notificationRunner(user, notifyInfo)
+            return res
+              .status(422)
+              .json({ message: 'Error: check your network and try again' })
           })
-      })
-      .catch(() => {
-        return res.status(403).json({ message: err.message })
-      })
+      },
+    )
   })
 }
 const client = new OAuth2Client(process.env.GOOGLE_AUTH_CLIENT)
