@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
       lowercase: true,
     },
     fullname: {
@@ -20,7 +19,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
     },
-    hashed_password: {
+    password: {
       type: String,
       required: true,
     },
@@ -38,7 +37,7 @@ const userSchema = new mongoose.Schema(
     occupation: {
       type: String,
       lowercase: true,
-      requied: true,
+      required: true,
     },
     profilePic: {
       picName: String,
@@ -48,8 +47,6 @@ const userSchema = new mongoose.Schema(
     },
     skill: String,
     aboutUser: String,
-    failedJobs: Number,
-    activationLink: '',
   },
   { timeStamp: true },
 )

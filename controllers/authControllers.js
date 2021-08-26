@@ -85,7 +85,7 @@ exports.loginController = (req, res) => {
     )
 
     bcrypt
-      .compare(password, user.hashed_password)
+      .compare(password, user.password)
       .then((info) => {
         if (info) {
           const notifyInfo = {
@@ -103,6 +103,7 @@ exports.loginController = (req, res) => {
           res.json({
             message: 'login successful',
             loginStatus: true,
+            cook: req.cookies.token,
           })
           return notificationRunner(user, notifyInfo)
         } else {
@@ -138,37 +139,41 @@ exports.activateController = (req, res) => {
       occupation,
     } = decoded
 
-    const user = new User({
-      fullname,
-      username,
-      email,
-      gender,
-      country,
-      occupation,
-      hashed_password: bcrypt.hashSync(password, 10),
-    })
+    bcrypt.hash(password, 10, (err, hashed_password) => {
+      if (err) {
+        res.status(422).json({ message: 'password Error please try again' })
+      }
 
-    user
-      .save()
-      .then((data) => {
-        transporter.sendMail(emailData.welcome(data), (error, success) => {
-          if (error || !success) {
-            User.findOneAndDelete({ email }).then(() => {
-              return res.status(422).json({
-                message: 'Error: please check your network and try again',
+      const user = new User({
+        fullname,
+        username,
+        email,
+        gender,
+        country,
+        occupation,
+        password: hashed_password,
+      })
+
+      user
+        .save()
+        .then((data) => {
+          transporter.sendMail(emailData.welcome(data), (error, success) => {
+            if (error || !success) {
+              User.findOneAndDelete({ email }).then(() => {
+                return res.status(422).json({
+                  message: 'Error: please check your network and try again',
+                })
               })
-            })
-          }
-          return res.json(
-            ' Your Email Activation Was Successful Login Now To Start Working',
-          )
+            }
+            return res.json(
+              ' Your Email Activation Was Successful Login Now To Start Working',
+            )
+          })
         })
-      })
-      .catch(() => {
-        res
-          .status(401)
-          .json({ message: 'Error while activating user. Please try again' })
-      })
+        .catch((err) => {
+          res.status(401).json({ message: err.message })
+        })
+    })
   })
 }
 
@@ -420,17 +425,6 @@ exports.updateProfileController = (req, res) => {
       })
     },
   )
-}
-exports.profileInfoController = (req, res) => {
-  const { email } = req.user
-
-  User.findOne({ email }, (err, user) => {
-    if (err || !user) {
-      return res.status(400).json({ message: err.message })
-    }
-
-    return res.json({ user })
-  })
 }
 
 exports.logoutController = (req, res) => {

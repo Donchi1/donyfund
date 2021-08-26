@@ -69,7 +69,7 @@ exports.workInformationController = async (req, res) => {
     .length
   const errorJobs = jobsInfo.filter((jobs) => jobs.status === 'error').length
 
-  return res.send({ totalWorks, totalWorkPrice, successJobs, errorJobs })
+  return res.json({ totalWorks, totalWorkPrice, successJobs, errorJobs })
 }
 exports.articleWorkController = (req, res) => {
   const { fullname, email } = req.user

@@ -9,7 +9,6 @@ const {
   activateController,
   googleLoginController,
   updateProfileController,
-  profileInfoController,
   logoutController,
 } = require('../controllers/authControllers')
 const accessTokenCheck = require('../authentification/tokenCheck')
@@ -27,7 +26,7 @@ router.post(
   upload,
   updateProfileController,
 )
-router.get('/profile/info', accessTokenCheck, profileInfoController)
+
 router.delete('/logout', logoutController)
 
 module.exports = router

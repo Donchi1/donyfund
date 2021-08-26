@@ -25,3 +25,15 @@ exports.notificationDelete = (req, res) => {
     return res.json({ notes })
   })
 }
+
+exports.profileInfoController = (req, res) => {
+  const { email } = req.user
+
+  User.findOne({ email }, (err, user) => {
+    if (err || !user) {
+      return res.status(400).json({ message: err.message })
+    }
+
+    return res.json({ user })
+  })
+}

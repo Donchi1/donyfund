@@ -5,7 +5,7 @@ const accessTokenCheck = (req, res, next) => {
   //const headerToken = req.headers['authorization']
 
   //const boken = headerToken && headerToken.split(' ')[1]
-  const token = req.cookies
+  const token = req.cookies.token
 
   if (!token) {
     return res.status(400).json({ message: 'No access token found try login' })
